@@ -26,8 +26,8 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 
 MATR		.set	17016
                                             
-			mov		#MATR, R6
-			mov		#0x2000, R5
+			mov		#MATR, R6				; numero em R6 virará nibbles respectivos em R6
+			mov		#0x2000, R5				; endereço de escrita final
 			call	#W16_ASC
 			jmp		$
 			nop
@@ -36,14 +36,14 @@ W16_ASC:
 			push	R6
 			push 	R5
 
-			mov		R6, R13
-			mov		#0x1000, R12
+			mov		R6, R13					; move nosso numero pra R13
+			mov		#0x1000, R12			; veremos quantos "1000" em hex encaixa no nosso numero
 			call	#udiv
 
 			call	#NIB_ASC				; converte R14
-			mov		R14, 0(R5)
+			mov		R14, 0(R5)				; sera o maior numero em ascii no endereço
 			clr		R14
-			add		#2, R5
+			add		#2, R5					; vai pro proximo, e a cada passada o numero é abatido do R13, copia do nosso numero
 
 			mov		#0x0100, R12
 			call	#udiv
