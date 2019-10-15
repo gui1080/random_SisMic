@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v18.1.6                     
 ******************************************************************************
->> Linked Mon Oct 14 20:24:42 2019
+>> Linked Mon Oct 14 12:50:13 2019
 
-OUTPUT FILE NAME:   <exe_17.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_mpu"  address: 00008114
+OUTPUT FILE NAME:   <exe_14.out>
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_mpu"  address: 00008160
 
 
 MEMORY CONFIGURATION
@@ -17,7 +17,7 @@ MEMORY CONFIGURATION
   TLVMEM                00001a00   00000200  00000000  00000200  RWIX
   BOOTCODE              00001c00   00000400  00000000  00000400  RWIX
   RAM                   00002000   00001000  000000a0  00000f60  RWIX
-  FRAM                  00008000   00007f80  00000134  00007e4c  RWIX
+  FRAM                  00008000   00007f80  00000180  00007e00  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   BSLCONFIGURATIONSIGNA 0000ff88   00000002  00000002  00000000  RWIX  ffff 
@@ -103,17 +103,17 @@ section   page    origin      length       input sections
 
 .const     0    00008000    00000000     UNINITIALIZED
 
-.text      0    00008000    00000114     
-                  00008000    000000b6     main.obj (.text:main)
-                  000080b6    0000003c     FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib : frwp_init.obj (.text:__mpu_init)
-                  000080f2    00000018     rts430x_lc_sd_eabi.lib : mult16_f5hw.asm.obj (.text)
-                  0000810a    00000006                            : exit.c.obj (.text:abort)
-                  00008110    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+.text      0    00008000    00000142     
+                  00008000    000000fc     main.obj (.text:main)
+                  000080fc    0000003c     FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib : frwp_init.obj (.text:__mpu_init)
+                  00008138    00000006     rts430x_lc_sd_eabi.lib : exit.c.obj (.text:abort)
+                  0000813e    00000004                            : pre_init.c.obj (.text:_system_pre_init)
 
 .text:_isr 
-*          0    00008114    00000020     
-                  00008114    00000018     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs_mpu)
-                  0000812c    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00008142    0000003e     
+                  00008142    0000001e     main.obj (.text:_isr:TB0_CCR1_ISR)
+                  00008160    00000018     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs_mpu)
+                  00008178    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
 .stack     0    00002f60    000000a0     UNINITIALIZED
                   00002f60    00000002     rts430x_lc_sd_eabi.lib : boot.c.obj (.stack)
@@ -190,7 +190,7 @@ TIMER1_B0
 
 TIMER0_B1 
 *          0    0000fff6    00000002     
-                  0000fff6    00000002     rts430x_lc_sd_eabi.lib : int42.asm.obj (.int42)
+                  0000fff6    00000002     main.obj (.int42)
 
 TIMER0_B0 
 *          0    0000fff8    00000002     
@@ -222,54 +222,52 @@ $fill004   0    0000ffa0    00000002
 
 MODULE SUMMARY
 
-       Module                code   ro data   rw data
-       ------                ----   -------   -------
+       Module             code   ro data   rw data
+       ------             ----   -------   -------
     .\
-       main.obj              182    0         0      
-    +--+---------------------+------+---------+---------+
-       Total:                182    0         0      
-                                                     
+       main.obj           282    2         0      
+    +--+------------------+------+---------+---------+
+       Total:             282    2         0      
+                                                  
     C:\ti\ccsv8\ccs_base\msp430\lib\FR2xx\FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib
-       frwp_init.obj         60     0         0      
-    +--+---------------------+------+---------+---------+
-       Total:                60     0         0      
-                                                     
+       frwp_init.obj      60     0         0      
+    +--+------------------+------+---------+---------+
+       Total:             60     0         0      
+                                                  
     C:\ti\ccsv8\tools\compiler\ti-cgt-msp430_18.1.6.LTS\lib\rts430x_lc_sd_eabi.lib
-       boot.c.obj            24     2         0      
-       mult16_f5hw.asm.obj   24     0         0      
-       isr_trap.asm.obj      8      0         0      
-       exit.c.obj            6      0         0      
-       pre_init.c.obj        4      0         0      
-       int22.asm.obj         0      2         0      
-       int23.asm.obj         0      2         0      
-       int24.asm.obj         0      2         0      
-       int25.asm.obj         0      2         0      
-       int26.asm.obj         0      2         0      
-       int27.asm.obj         0      2         0      
-       int28.asm.obj         0      2         0      
-       int29.asm.obj         0      2         0      
-       int30.asm.obj         0      2         0      
-       int31.asm.obj         0      2         0      
-       int32.asm.obj         0      2         0      
-       int33.asm.obj         0      2         0      
-       int34.asm.obj         0      2         0      
-       int35.asm.obj         0      2         0      
-       int36.asm.obj         0      2         0      
-       int37.asm.obj         0      2         0      
-       int38.asm.obj         0      2         0      
-       int39.asm.obj         0      2         0      
-       int40.asm.obj         0      2         0      
-       int41.asm.obj         0      2         0      
-       int42.asm.obj         0      2         0      
-       int43.asm.obj         0      2         0      
-       int44.asm.obj         0      2         0      
-       int45.asm.obj         0      2         0      
-    +--+---------------------+------+---------+---------+
-       Total:                66     50        0      
-                                                     
-       Stack:                0      0         160    
-    +--+---------------------+------+---------+---------+
-       Grand Total:          308    50        160    
+       boot.c.obj         24     2         0      
+       isr_trap.asm.obj   8      0         0      
+       exit.c.obj         6      0         0      
+       pre_init.c.obj     4      0         0      
+       int22.asm.obj      0      2         0      
+       int23.asm.obj      0      2         0      
+       int24.asm.obj      0      2         0      
+       int25.asm.obj      0      2         0      
+       int26.asm.obj      0      2         0      
+       int27.asm.obj      0      2         0      
+       int28.asm.obj      0      2         0      
+       int29.asm.obj      0      2         0      
+       int30.asm.obj      0      2         0      
+       int31.asm.obj      0      2         0      
+       int32.asm.obj      0      2         0      
+       int33.asm.obj      0      2         0      
+       int34.asm.obj      0      2         0      
+       int35.asm.obj      0      2         0      
+       int36.asm.obj      0      2         0      
+       int37.asm.obj      0      2         0      
+       int38.asm.obj      0      2         0      
+       int39.asm.obj      0      2         0      
+       int40.asm.obj      0      2         0      
+       int41.asm.obj      0      2         0      
+       int43.asm.obj      0      2         0      
+       int44.asm.obj      0      2         0      
+       int45.asm.obj      0      2         0      
+    +--+------------------+------+---------+---------+
+       Total:             42     48        0      
+                                                  
+       Stack:             0      0         160    
+    +--+------------------+------+---------+---------+
+       Grand Total:       384    50        160    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -354,7 +352,7 @@ address   name
 00000672  BAKMEM9                        
 00000673  BAKMEM9_H                      
 00000672  BAKMEM9_L                      
-0000810a  C$$EXIT                        
+00008138  C$$EXIT                        
 000002ee  CAPTIOCTL                      
 000002ef  CAPTIOCTL_H                    
 000002ee  CAPTIOCTL_L                    
@@ -992,6 +990,7 @@ address   name
 00000390  TB0R                           
 00000391  TB0R_H                         
 00000390  TB0R_L                         
+00008142  TB0_CCR1_ISR                   
 000003d2  TB1CCR0                        
 000003d3  TB1CCR0_H                      
 000003d2  TB1CCR0_L                      
@@ -1285,7 +1284,7 @@ address   name
 000001cc  WDTCTL_L                       
 00003000  __STACK_END                    
 000000a0  __STACK_SIZE                   
-0000812c  __TI_ISR_TRAP                  
+00008178  __TI_ISR_TRAP                  
 0000ffce  __TI_int22                     
 0000ffd0  __TI_int23                     
 0000ffd2  __TI_int24                     
@@ -1315,13 +1314,12 @@ ffffffff  __TI_prof_data_size
 ffffffff  __TI_prof_data_start           
 ffffffff  __c_args__                     
 00000001  __mpu_enable                   
-000080b6  __mpu_init                     
-000080f2  __mspabi_mpyi_f5hw             
-00008114  _c_int00_noinit_noargs_mpu     
+000080fc  __mpu_init                     
+00008160  _c_int00_noinit_noargs_mpu     
 0000fffe  _reset_vector                  
 00002f60  _stack                         
-00008110  _system_pre_init               
-0000810a  abort                          
+0000813e  _system_pre_init               
+00008138  abort                          
 00008000  fram_rw_start                  
 00008000  fram_rx_start                  
 00000001  info_fram_protection           
@@ -2350,13 +2348,13 @@ address   name
 00008000  fram_rw_start                  
 00008000  fram_rx_start                  
 00008000  main                           
-000080b6  __mpu_init                     
-000080f2  __mspabi_mpyi_f5hw             
-0000810a  C$$EXIT                        
-0000810a  abort                          
-00008110  _system_pre_init               
-00008114  _c_int00_noinit_noargs_mpu     
-0000812c  __TI_ISR_TRAP                  
+000080fc  __mpu_init                     
+00008138  C$$EXIT                        
+00008138  abort                          
+0000813e  _system_pre_init               
+00008142  TB0_CCR1_ISR                   
+00008160  _c_int00_noinit_noargs_mpu     
+00008178  __TI_ISR_TRAP                  
 0000ffce  __TI_int22                     
 0000ffd0  __TI_int23                     
 0000ffd2  __TI_int24                     

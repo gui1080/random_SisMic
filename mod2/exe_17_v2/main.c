@@ -15,9 +15,9 @@ void debounce(uint16_t input){
 
 int main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	PM5CTL0 &= ~(LOCKLPM5);
-	
+    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    PM5CTL0 &= ~(LOCKLPM5);
+
     P4DIR &= ~(BIT1);           // habilita entrada no P4.1 (botão S1)
     P4REN |= BIT1;              // habilita resistor
     P4OUT |= BIT1;              // escolhe resistor de pull up
@@ -39,38 +39,33 @@ int main(void)
     volatile unsigned int tempo2;
     volatile unsigned int tempo_final;
 
+
     while(1){
 
         tempo = 0;
         while(P4IN & BIT1);  // não faz nada se não apertamos S1
 
-        TB0CTL = (TBSSEL__ACLK | ID__4 | MC__CONTINOUS | TBCLR);
+        //----------------------------------------------------------
+        // Começo do Clock: Modo Contínuo, ACLK
+        TB0CTL = TBSSEL__ACLK | ID__4 | MC__CONTINUOUS;
 
-        // ACLK conta 2 segundos
-        // ID__4 faz o contador ficar 4 vezes mais lento, 8 segundos
+        // CAP: Seleciona entre captura e comparação
+        // CM: Configura o modo de captura,
+        // SCS: define a sincronia do clock com o sinal de captura
+        TB0CCTL1 = CAP | SCS | CM_1;
+        CCIS1 |= BIT0;
+        CCIS0 &= ~BIT0;
 
-       // aperta s2, espera
-       while(P2IN & BIT3);    //não faz nada enquanto não se aperta s2
+        // aperta s2, espera
+        while(P2IN & BIT3);    //não faz nada enquanto não se aperta s2
+        CCIS0 |= BIT0;
 
-       tempo = TB0R;    // batidas de clock
-       tempo2 = (tempo * 1000);
-       tempo_final = (tempo2 / 8192);      //8192 = ACLK / 4
+        TB0CCTL1 &= ~CCIFG;
+        tempo = TB0CCR1;
 
-       if(tempo >= 45000){
-           P1OUT &= ~(BIT0);
-           P6OUT |= (BIT6);
-       }
-       if((tempo >= 28000) && (tempo < 45000)){
-           P1OUT |= (BIT0);
-           P6OUT |= (BIT6);
-       }
-       else{
-           P1OUT |= (BIT0);
-           P6OUT &= ~BIT6;
-       }
+        tempo_final = (tempo / 8192);      //8192 = ACLK / 4
 
-       while(1);
-       //TB0CCTL1 &= ~CCIFG;
+        while(1);
 
     }
 

@@ -1,11 +1,19 @@
+// trena digital
+
 #include <msp430.h> 
 #include <stdint.h>
 
-void debounce(uint16_t input){
+void wait(uint16_t input){
 
     volatile uint16_t dt;
     dt = input;
-    while(dt--);
+
+    TB0CTL = TASSEL__SMCLK | MC__UP | TACLR;
+    TB0CCR0 = dt;
+
+    while(!(TB0CCTL0 & CCIFG));
+    TA4CCTL0 &= ~CCIFG;
+
 
 }
 
@@ -15,9 +23,9 @@ void debounce(uint16_t input){
 
 int main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	PM5CTL0 &= ~(LOCKLPM5);
-	
+    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    PM5CTL0 &= ~(LOCKLPM5);
+
     P4DIR &= ~(BIT1);           // habilita entrada no P4.1 (botão S1)
     P4REN |= BIT1;              // habilita resistor
     P4OUT |= BIT1;              // escolhe resistor de pull up
@@ -34,6 +42,16 @@ int main(void)
     P6REN &= ~(BIT6);           // habilita resistor de pull up
     P6OUT &= ~(BIT6);           // zera saida
 
+    //S0                        // envia pro ultrassom no P6.0
+    P6DIR |= BIT0;
+    P6OUT |= BIT0;
+
+    // entrada ultrassom
+    P6DIR &= ~(BIT1);           // entrada
+    P6REN |= BIT1;              // habilitamos sua leitura
+    P6OUT |= BIT1;              // inicializamos com zero
+    P6SEL1 |= (BIT1);
+
 
     volatile unsigned int tempo;
     volatile unsigned int tempo2;
@@ -44,37 +62,21 @@ int main(void)
         tempo = 0;
         while(P4IN & BIT1);  // não faz nada se não apertamos S1
 
-        TB0CTL = (TBSSEL__ACLK | ID__4 | MC__CONTINOUS | TBCLR);
+        P6OUT |= BIT0;
+        wait(20);
+        P6OUT &= ~BIT0;
 
-        // ACLK conta 2 segundos
-        // ID__4 faz o contador ficar 4 vezes mais lento, 8 segundos
+        while(!(P6IN & BIT1));      //espero meu pino conectado ao echo receber um sinal
 
-       // aperta s2, espera
-       while(P2IN & BIT3);    //não faz nada enquanto não se aperta s2
+        TB0CTL = (TBSSEL__SMCLK | MC__CONTINOUS | TBCLR);
 
-       tempo = TB0R;    // batidas de clock
-       tempo2 = (tempo * 1000);
-       tempo_final = (tempo2 / 8192);      //8192 = ACLK / 4
+        while(P6IN & BIT1);     // espero parar de receber um sinal
 
-       if(tempo >= 45000){
-           P1OUT &= ~(BIT0);
-           P6OUT |= (BIT6);
-       }
-       if((tempo >= 28000) && (tempo < 45000)){
-           P1OUT |= (BIT0);
-           P6OUT |= (BIT6);
-       }
-       else{
-           P1OUT |= (BIT0);
-           P6OUT &= ~BIT6;
-       }
+        tempo = TB0R;    // batidas de clock
 
-       while(1);
+
+        while(1);   // no lugar disso aqui eu ligaria os leds de acordo e tal
+
        //TB0CCTL1 &= ~CCIFG;
 
     }
-
-
-    return 0;
-
-}
