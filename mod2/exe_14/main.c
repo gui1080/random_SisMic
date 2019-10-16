@@ -1,5 +1,13 @@
 #include <msp430.h> 
 
+void debounce(int input){
+
+    volatile unsigned int dt;
+    dt = input;
+    while(dt--);
+
+}
+
 /**
  * main.c
  */
@@ -30,11 +38,9 @@ void main()
 
     TB0CCTL1 = CCIE;
 
-    volatile unsigned int duty_cycle;
-    duty_cycle = 5;
 
-    TB0CCR0 = 0x28F - 1;     // 50hz
-    TB0CCR1 = 0x147 - 1;     // duty cycle
+    TB0CCR0 = 655 - 1;     // 50hz
+    TB0CCR1 = 655 * 0.5;     // duty cycle
 
     __enable_interrupt();  // cntrl + space, HABILITADOR GLOBAL DE INTERRUPÇÃO EM SR
                             // SETA GIE no SR
@@ -43,53 +49,18 @@ void main()
 
         while((P2IN & BIT3) && (P4IN & BIT1));  // não faz nada se não apertamos nada
 
+        debounce(10000);
+
         if(!(P4IN & BIT1)){    // aperta s1
-            duty_cycle = duty_cycle - 1;
+            debounce(10000);
+            TB0CCR1 -= 0.1 * TB0CCR0;
         }
 
         if(!(P2IN & BIT3)){    // aperta s2
-            duty_cycle= duty_cycle + 1;
+            debounce(10000);
+            TB0CCR1 += 0.1 * TB0CCR0;
         }
 
-        switch(duty_cycle){
-        case 1:
-            TB0CCR1 = 0x42 - 1;
-            break;
-        case 2:
-            TB0CCR1 = 0x83 - 1;
-             break;
-
-        case 3:
-            TB0CCR1 = 0xC5 -1;
-            break;
-        case 4:
-            TB0CCR1 = 0x106 - 1;
-            break;
-
-        case 5:
-            TB0CCR1 = 0x147 - 1;
-            break;
-
-        case 6:
-            TB0CCR1 = 0x189 - 1;
-            break;
-
-        case 7:
-            TB0CCR1 = 0x1C8 - 1;
-            break;
-
-        case 8:
-            TB0CCR1 = 0x20C - 1;
-            break;
-
-        case 9:
-            TB0CCR1 = 0x24E - 1;
-            break;
-
-        default:
-            TB0CCR1 = 0x147 - 1;
-            break;
-        }
 
     }
 

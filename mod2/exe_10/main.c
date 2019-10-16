@@ -26,7 +26,7 @@ int main(void)
 	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 
     TB0CTL = (TBSSEL__ACLK | MC__UP | TBCLR); // MC__UP faz teto de contagem
-    TB0CCR0 = 0x8000 - 1;   //ACLK conta 2 segundos, pegamos metade
+    TB0CCR0 = 0x8000 - 1;
 
     TBCCTL0 = CCIE; // permite vermos a interrupção (local)
     __enable_interrupt();  // cntrl + space, HABILITADOR GLOBAL DE INTERRUPÇÃO EM SR

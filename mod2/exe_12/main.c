@@ -24,8 +24,10 @@ int main(void)
                     MC__UP |        // MC__UP faz teto de contagem (conta, chega no teto, volta, repete)
                     TBCLR);         // começa do zero
 
-    TB0CCR0 = 0x8000 - 1;   //ACLK conta 2 segundos, pegamos metade
-    TB0CCR1 = 0x4000 - 1;
+    TB0CCR0 = 0x8000 - 1;    // @2hz
+    TB0CCR1 = 0x199A - 1;    // @5hz
+
+    TBCCTL1 = CCIE;
 
     __enable_interrupt();  // cntrl + space, HABILITADOR GLOBAL DE INTERRUPÇÃO EM SR
                             // SETA GIE no SR
