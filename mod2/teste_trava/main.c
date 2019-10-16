@@ -1,6 +1,17 @@
 #include <msp430.h> 
 
 
+// Aluno: Guilherme Braga Pinto, 17/0162290
+// Turma D, Professor Daniel Café
+// Prova 2 de Lab. SisMic
+
+/*
+ * SMCLK (@1048576hz) conta 65ms, o ID deixa x vezes mais lento
+ * ACLK (@32768hz) conta 2 segundos
+ *
+ */
+
+
 inline void trava_milissegundos(long long int milissegundos){
 
     // conta até 8 segundos

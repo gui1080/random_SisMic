@@ -1,6 +1,14 @@
 #include <msp430.h> 
 #include <stdint.h>
 
+// CAPTURA DE BOTÕES (TEMPO EM MILISSEGUNDOS)
+
+/*
+ * SMCLK (@1048576hz) conta 65ms, o ID deixa x vezes mais lento
+ * ACLK (@32768hz) conta 2 segundos
+ *
+ */
+
 void debounce(uint16_t input){
 
     volatile uint16_t dt;
@@ -35,13 +43,14 @@ int main(void)
     P6OUT &= ~(BIT6);           // zera saida
 
 
-    volatile unsigned int tempo;
-    volatile unsigned int tempo2;
-    volatile unsigned int tempo_final;
+    volatile unsigned long int tempo;
+    volatile unsigned long int tempo_final;
 
     while(1){
 
         tempo = 0;
+        tempo_final = 0;
+
         while(P4IN & BIT1);  // não faz nada se não apertamos S1
 
         TB0CTL = (TBSSEL__ACLK | ID__4 | MC__CONTINOUS | TBCLR);
@@ -53,24 +62,22 @@ int main(void)
        while(P2IN & BIT3);    //não faz nada enquanto não se aperta s2
 
        tempo = TB0R;    // batidas de clock
-       tempo2 = (tempo * 1000);
-       tempo_final = (tempo2 / 8192);      //8192 = ACLK / 4
+       tempo_final = ((tempo * 1000) / 8192);      //8192 = ACLK / 4
 
-       if(tempo >= 45000){
+       if(tempo_final >= 3000){
            P1OUT &= ~(BIT0);
            P6OUT |= (BIT6);
        }
-       if((tempo >= 28000) && (tempo < 45000)){
+       if((tempo_final < 3000) && (tempo_final > 1000)){
            P1OUT |= (BIT0);
            P6OUT |= (BIT6);
        }
-       else{
+       if(tempo_final < 1000){
            P1OUT |= (BIT0);
            P6OUT &= ~BIT6;
        }
 
        while(1);
-       //TB0CCTL1 &= ~CCIFG;
 
     }
 
