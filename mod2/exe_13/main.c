@@ -1,5 +1,7 @@
 #include <msp430.h> 
 
+//PWM DUTY CYCLE FIXO
+
 /**
  * main.c
  */

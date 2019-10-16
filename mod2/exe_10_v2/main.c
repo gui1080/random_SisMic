@@ -1,5 +1,8 @@
 #include <msp430.h> 
 
+// PRAGMA VECTOR INTERRUPÇÃO AGRUPADA
+// o led pisca exatamente 1hz (0,5 segundos apagado e 0,5 aceso)
+
 /**
  * main.c
  */

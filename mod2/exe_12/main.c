@@ -1,5 +1,7 @@
 #include <msp430.h> 
 
+// PRAGMA VECTOR AGRUPADO COM INSTÂNCIAS DIFERENTES
+
 /**
  * main.c
  */

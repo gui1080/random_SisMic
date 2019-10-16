@@ -1,5 +1,7 @@
 #include <msp430.h> 
 
+// o led pisca exatamente 1hz (0,5 segundos apagado e 0,5 aceso)
+// PRAGMA VECTOR INTERRUPÇÃO ÚNICA
 /**
  * main.c
  */

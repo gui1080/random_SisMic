@@ -1,5 +1,7 @@
 #include <msp430.h> 
 
+//PWM DUTY CYCLE VARIÁVEL
+
 void debounce(int input){
 
     volatile unsigned int dt;
